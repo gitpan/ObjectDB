@@ -1,7 +1,7 @@
 --- #YAML:1.0
 name:               ObjectDB
-version:            0.990102
-abstract:           Lightweight Object-relational mapping
+version:            0.990103
+abstract:           Lightweight Object-relational mapper
 author:
     - Viacheslav Tykhanovskyi <vti@cpan.org>
 license:            perl
