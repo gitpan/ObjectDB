@@ -5,22 +5,16 @@ use warnings;
 
 use base 'TestDB';
 
-__PACKAGE__->schema(
+__PACKAGE__->meta(
     table          => 'author',
-    columns        => [qw/id name password/],
-    primary_keys   => ['id'],
+    columns        => [qw/id name/],
+    primary_key    => 'id',
     auto_increment => 'id',
     unique_keys    => 'name',
-
-    relationships => {
-        author_admin => {
-            type  => 'one to one',
-            class => 'AuthorAdmin',
-            map   => {id => 'author_id'}
-        },
-        articles => {
+    relationships  => {
+        books => {
             type  => 'one to many',
-            class => 'Article',
+            class => 'Book',
             map   => {id => 'author_id'}
         }
     }
