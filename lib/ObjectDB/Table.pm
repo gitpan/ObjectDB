@@ -3,7 +3,7 @@ package ObjectDB::Table;
 use strict;
 use warnings;
 
-our $VERSION = '3.03';
+our $VERSION = '3.04';
 
 use constant DEFAULT_PAGE_SIZE => 10;
 
@@ -97,6 +97,7 @@ sub find {
     return unless $rows && @$rows;
 
     my @objects =
+      map { $_->is_in_db(1) }
       map { $self->meta->class->new(%{$_}) } @{$select->from_rows($rows)};
 
     return $single ? $objects[0] : @objects;

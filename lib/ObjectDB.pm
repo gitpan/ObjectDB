@@ -15,7 +15,7 @@ use ObjectDB::Table;
 use ObjectDB::With;
 use ObjectDB::Util qw(execute);
 
-our $VERSION = '3.03';
+our $VERSION = '3.04';
 
 $Carp::Internal{(__PACKAGE__)}++;
 $Carp::Internal{"ObjectDB::$_"}++ for qw/
@@ -64,6 +64,11 @@ sub new {
 
 sub is_in_db {
     my $self = shift;
+
+    if (@_) {
+        $self->{is_in_db} = $_[0];
+        return $self;
+    }
 
     return $self->{is_in_db};
 }
