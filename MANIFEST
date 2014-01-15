@@ -54,6 +54,7 @@ t/related/one-to-one.t
 t/row/create.t
 t/row/delete.t
 t/row/load.t
+t/row/new-with-related.t
 t/row/related.t
 t/row/to-hash.t
 t/row/txn.t
@@ -64,6 +65,7 @@ t/table/find-with-paging.t
 t/table/find-with-related.t
 t/table/find.t
 t/table/update.t
+t/util.t
 t/with.t
 META.yml
 MANIFEST
