@@ -30,69 +30,69 @@ no_index:
 provides:
   ObjectDB:
     file: lib/ObjectDB.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::DBHPool:
     file: lib/ObjectDB/DBHPool.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::DBHPool::Connection:
     file: lib/ObjectDB/DBHPool/Connection.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Exception:
     file: lib/ObjectDB/Exception.pm
   ObjectDB::Factory:
     file: lib/ObjectDB/Factory.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Meta:
     file: lib/ObjectDB/Meta.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Meta::Relationship:
     file: lib/ObjectDB/Meta/Relationship.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Meta::Relationship::ManyToMany:
     file: lib/ObjectDB/Meta/Relationship/ManyToMany.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Meta::Relationship::ManyToOne:
     file: lib/ObjectDB/Meta/Relationship/ManyToOne.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Meta::Relationship::OneToMany:
     file: lib/ObjectDB/Meta/Relationship/OneToMany.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Meta::Relationship::OneToOne:
     file: lib/ObjectDB/Meta/Relationship/OneToOne.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Meta::RelationshipFactory:
     file: lib/ObjectDB/Meta/RelationshipFactory.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Quoter:
     file: lib/ObjectDB/Quoter.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Related:
     file: lib/ObjectDB/Related.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Related::ManyToMany:
     file: lib/ObjectDB/Related/ManyToMany.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Related::ManyToOne:
     file: lib/ObjectDB/Related/ManyToOne.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Related::OneToMany:
     file: lib/ObjectDB/Related/OneToMany.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Related::OneToOne:
     file: lib/ObjectDB/Related/OneToOne.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::RelatedFactory:
     file: lib/ObjectDB/RelatedFactory.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Table:
     file: lib/ObjectDB/Table.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::Util:
     file: lib/ObjectDB/Util.pm
-    version: 3.04
+    version: 3.05
   ObjectDB::With:
     file: lib/ObjectDB/With.pm
-    version: 3.04
+    version: 3.05
 requires:
   Carp: 0
   DBI: 0
@@ -103,6 +103,6 @@ resources:
   bugtracker: https://github.com/vti/object-db3/issues
   homepage: https://github.com/vti/object-db3
   repository: git://github.com/vti/object-db3.git
-version: 3.04
+version: 3.05
 x_contributors:
   - 'vti <viacheslav.t@gmail.com>'
