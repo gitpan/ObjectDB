@@ -3,7 +3,7 @@ package ObjectDB::Meta::Relationship;
 use strict;
 use warnings;
 
-our $VERSION = '3.07';
+our $VERSION = '3.08';
 
 require Carp;
 use ObjectDB::Util qw(load_class);
@@ -28,6 +28,8 @@ sub new {
 
 sub name { $_[0]->{name} }
 sub map  { $_[0]->{map} }
+
+sub is_multi  { 0 }
 
 sub orig_class {
     my $self = shift;

@@ -5,8 +5,8 @@ use warnings;
 
 use base 'Exporter';
 
-our $VERSION   = '3.07';
-our @EXPORT_OK = qw(load_class execute merge);
+our $VERSION   = '3.08';
+our @EXPORT_OK = qw(load_class execute merge merge_rows);
 
 require Carp;
 use Hash::Merge ();
@@ -55,10 +55,13 @@ sub load_class {
 sub execute {
     my ($dbh, $stmt, %context) = @_;
 
+    my $sql  = $stmt->to_sql;
+    my @bind = $stmt->to_bind;
+
     my ($rv, $sth);
     eval {
-        $sth = $dbh->prepare($stmt->to_sql);
-        $rv  = $sth->execute($stmt->to_bind);
+        $sth = $dbh->prepare($sql);
+        $rv  = $sth->execute(@bind);
 
         1;
     } or do {
@@ -80,6 +83,58 @@ sub merge {
         $merge;
     };
     $merge->merge(@_);
+}
+
+sub merge_rows {
+    my $rows = shift;
+
+    my $merged = [];
+
+    my %order;
+  NEXT_MERGE: while (@$rows) {
+        my $row = shift @$rows;
+
+        my $row_sign = '';
+        foreach my $key (sort keys %$row) {
+            my $value = $row->{$key};
+            $value = \'join' if ref $value eq 'HASH' || ref $value eq 'ARRAY';
+
+            $value = \undef unless defined $value;
+            $row_sign .= "$key=$value";
+        }
+
+        if (!exists $order{$row_sign}) {
+            $order{$row_sign} = $row;
+
+            push @$merged, $row;
+            next NEXT_MERGE;
+        }
+
+        my $prev = $order{$row_sign};
+
+        foreach my $key (keys %$row) {
+            next
+              unless ref $prev->{$key} eq 'HASH'
+              || ref $prev->{$key} eq 'ARRAY';
+
+            my $prev_row =
+              ref $prev->{$key} eq 'ARRAY'
+              ? $prev->{$key}->[-1]
+              : $prev->{$key};
+
+            my $merged = merge_rows([$prev_row, $row->{$key}]);
+            if (@$merged > 1) {
+                my $prev_rows =
+                  ref $prev->{$key} eq 'ARRAY'
+                  ? $prev->{$key}
+                  : [$prev->{$key}];
+                pop @$prev_rows;
+                $prev->{$key} = [@$prev_rows, @$merged];
+            }
+        }
+    }
+
+    return $merged;
 }
 
 1;

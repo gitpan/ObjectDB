@@ -5,11 +5,12 @@ use warnings;
 
 use base 'ObjectDB::Meta::Relationship';
 
-our $VERSION = '3.07';
+our $VERSION = '3.08';
 
 require Carp;
 
-sub type { 'one to many' }
+sub type     { 'one to many' }
+sub is_multi { 1 }
 
 sub to_source {
     my $self = shift;

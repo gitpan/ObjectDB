@@ -40,8 +40,10 @@ t/lib/Tag.pm
 t/lib/TestDB.pm
 t/lib/TestDBH.pm
 t/lib/TestEnv.pm
+t/merge-rows.t
 t/meta/many-to-many.t
 t/meta/many-to-one.t
+t/meta/meta-auto-discovery.t
 t/meta/meta.t
 t/meta/one-to-many.t
 t/meta/one-to-one.t
@@ -61,8 +63,8 @@ t/row/txn.t
 t/row/update.t
 t/table/count.t
 t/table/delete.t
+t/table/find-by-sql.t
 t/table/find-with-paging.t
-t/table/find-with-related.t
 t/table/find.t
 t/table/update.t
 t/util.t

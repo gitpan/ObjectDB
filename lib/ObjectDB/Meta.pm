@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use mro;
 
-our $VERSION = '3.07';
+our $VERSION = '3.08';
 
 require Storable;
 require Carp;
@@ -47,6 +47,18 @@ sub new {
       if $params{auto_increment};
 
     $self->_build_relationships($params{relationships});
+
+    if ($params{discover_schema}) {
+        $self->discover_schema;
+    }
+
+    if ($params{generate_columns_methods}) {
+        $self->generate_columns_methods;
+    }
+
+    if ($params{generate_related_methods}) {
+        $self->generate_related_methods;
+    }
 
     return $self;
 }
@@ -316,6 +328,57 @@ sub add_relationships {
 
         $count += 2;
     }
+}
+
+sub discover_schema {
+    my $self = shift;
+
+    eval { require DBIx::Inspector; 1 } or do {
+        Carp::croak('DBIx::Inspector is required for auto discover');
+    };
+
+    my $dbh = $self->class->init_db;
+
+    my $inspector = DBIx::Inspector->new(dbh => $dbh);
+
+    my $table = $inspector->table($self->table);
+
+    $self->set_columns(
+        map {
+            $_->name => defined $_->column_def
+              ? ({default => $_->column_def})
+              : ()
+        } $table->columns
+    );
+    $self->set_primary_key(map { $_->name } $table->primary_key);
+
+    return $self;
+}
+
+sub generate_columns_methods {
+    my $self = shift;
+
+    no strict 'refs';
+    no warnings 'redefine';
+    foreach my $column ($self->get_columns) {
+        *{$self->class . '::' . $column} =
+          sub { shift->column($column, @_) };
+    }
+
+    return $self;
+}
+
+sub generate_related_methods {
+    my $self = shift;
+
+    no strict 'refs';
+    no warnings 'redefine';
+    foreach my $rel_name (keys %{$self->relationships}) {
+        *{$self->class . '::' . $rel_name} =
+          sub { shift->related($rel_name, @_) };
+    }
+
+    return $self;
 }
 
 sub _build_relationships {
