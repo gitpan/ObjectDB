@@ -15,7 +15,7 @@ use ObjectDB::Table;
 use ObjectDB::With;
 use ObjectDB::Util qw(execute merge_rows filter_columns);
 
-our $VERSION = '3.09';
+our $VERSION = '3.10';
 
 $Carp::Internal{(__PACKAGE__)}++;
 $Carp::Internal{"ObjectDB::$_"}++ for qw/
@@ -430,7 +430,7 @@ sub load {
     my $rows = $sth->fetchall_arrayref;
     return unless $rows && @$rows;
 
-    my $row_object = merge_rows($select->from_rows($rows))->[0];
+    my $row_object = $select->from_rows($rows)->[0];
 
     $self->{columns} = {};
 

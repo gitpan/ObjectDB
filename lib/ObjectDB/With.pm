@@ -3,7 +3,7 @@ package ObjectDB::With;
 use strict;
 use warnings;
 
-our $VERSION = '3.09';
+our $VERSION = '3.10';
 
 sub new {
     my $class = shift;
@@ -20,7 +20,7 @@ sub new {
     my $joins = {join => []};
 
     my %seen;
-    if (my @with = sort @{$self->{with} || []}) {
+    if (my @with = sort grep { defined } @{$self->{with} || []}) {
         foreach my $with (@with) {
             my $meta = $self->{meta};
 
@@ -39,17 +39,19 @@ sub new {
                     next;
                 }
 
-                my $join = $rel->to_source(table => $parent_join->{as});
+                my @joins = $rel->to_source(table => $parent_join->{as});
 
-                push @{$parent_join->{join}},
-                  {
-                    source  => $join->{table},
-                    as      => $join->{as},
-                    on      => $join->{constraint},
-                    op      => $join->{join},
-                    columns => $join->{columns},
-                    join    => []
-                  };
+                foreach my $join (@joins) {
+                    push @{$parent_join->{join}},
+                      {
+                        source  => $join->{table},
+                        as      => $join->{as},
+                        on      => $join->{constraint},
+                        op      => $join->{join},
+                        columns => $join->{columns},
+                        join    => []
+                      };
+                }
 
                 $parent_join = $parent_join->{join}->[-1];
                 $seen{$seen} = $parent_join;
