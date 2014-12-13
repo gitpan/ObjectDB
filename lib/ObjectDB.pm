@@ -15,7 +15,7 @@ use ObjectDB::Table;
 use ObjectDB::With;
 use ObjectDB::Util qw(execute merge_rows filter_columns);
 
-our $VERSION = '3.10';
+our $VERSION = '3.11';
 
 $Carp::Internal{(__PACKAGE__)}++;
 $Carp::Internal{"ObjectDB::$_"}++ for qw/
@@ -123,14 +123,13 @@ sub txn {
 
     my $dbh = $self->init_db;
 
-    return eval {
+    my $retval;
+    eval {
         $dbh->{AutoCommit} = 0;
 
-        my $retval = $cb->($self);
+        $retval = $cb->($self);
 
         $self->commit;
-
-        return $retval;
     } || do {
         my $e = $@;
 
@@ -138,6 +137,8 @@ sub txn {
 
         Carp::croak($e);
     };
+
+    return $retval;
 }
 
 sub commit {
@@ -219,7 +220,7 @@ sub get_column {
                 return ref $default eq 'CODE' ? $default->() : $default;
             }
             else {
-                return;
+                return undef;
             }
         }
 
@@ -366,6 +367,14 @@ sub create {
 
     foreach my $rel_name (keys %{$self->meta->relationships}) {
         if (my $rel_values = $self->{relationships}->{$rel_name}) {
+            if (ref $rel_values eq 'ARRAY') {
+                @$rel_values = grep { !$_->is_in_db } @$rel_values;
+                next unless @$rel_values;
+            }
+            else {
+                next if $rel_values->is_in_db;
+            }
+
             my $rel = $self->meta->get_relationship($rel_name);
             my @related = $self->create_related($rel_name, $rel_values);
 
